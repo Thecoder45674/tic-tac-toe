@@ -107,5 +107,37 @@ function GameController (playerOneName, playerTwoName) {
     // Function to check if the game is a draw
     const isDraw = (board) => 
         board.every(row => row.every(cell => cell.getValue() !== 0)) && !checkForWinner(board);
-}
 
+    const playRound = (row, column) => {
+        if (!gameActive) {
+            console.log("The game is over! No further moves can be made.");
+            return; // Prevent further moves if the game has ended
+        }
+
+        // Place token for the current player
+        console.log(
+            `Place ${getActivePlayer().name}'s token into position ${row},${column}`
+        );
+        board.placeToken(row, column, getActivePlayer().token);
+
+        printNewRound();
+
+        if (checkForWinner(board.getBoard())) {
+            console.log(`${getActivePlayer().name} wins!`);
+            gameActive = false;
+            return;
+        } else if (isDraw(board.getBoard())) { 
+            console.log("It's a draw!");
+            gameActive = false;
+            return;
+        }
+
+        // Switch player turn
+        switchPlayerTurn();
+        printNewRound();
+    }
+
+    printNewRound();
+
+    return { playRound, getActivePlayer, printNewRound }
+}
