@@ -80,4 +80,15 @@ function GameController(playerOneName, playerTwoName) {
     ];
 
     let activePlayer = players[0];
+
+    const switchPlayerTurn = () => {
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
+    };
+
+    // Function to print the current state of the board and active player
+    const printNewRound = () => {
+        board.printBoard();
+        console.log(`${activePlayer.name}'s turn.`);
+    };
 }
+
