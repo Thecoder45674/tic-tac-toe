@@ -103,4 +103,9 @@ function GameController (playerOneName, playerTwoName) {
         if (board[0][2].getValue() && board[0][2].getValue() === board[1][1].getValue() && board[1][1].getValue() === board[2][0].getValue()) return true; // Diagonal winner
         return false; // No winner
     };
+
+    // Function to check if the game is a draw
+    const isDraw = (board) => 
+        board.every(row => row.every(cell => cell.getValue() !== 0)) && !checkForWinner(board);
 }
+
