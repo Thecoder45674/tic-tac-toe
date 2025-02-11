@@ -95,12 +95,18 @@ function GameController (playerOneName, playerTwoName) {
     const checkForWinner = (board) => {
         // Check rows and columns for a winner
         for (let i = 0; i < 3; i++) {
-            if (board[i][0].getValue() && board[i][0].getValue() === board[i][1].getValue() && board[i][1].getValue() === board[i][2].getValue()) return true; // Row winner
-            if (board[0][i].getValue() && board[0][i].getValue() === board[1][i].getValue() && board[1][i].getValue() === board[2][i].getValue()) return true; // Column winner
+            if (board[i][0].getValue() && board[i][0].getValue() === board[i][1].getValue() 
+                && board[i][1].getValue() === board[i][2].getValue()) return true; // Row winner
+
+            if (board[0][i].getValue() && board[0][i].getValue() === board[1][i].getValue() 
+                && board[1][i].getValue() === board[2][i].getValue()) return true; // Column winner
         }
         // Check diagonals for a winner
-        if (board[0][0].getValue() && board[0][0].getValue() === board[1][1].getValue() && board[1][1].getValue() === board[2][2].getValue()) return true; // Diagonal winner
-        if (board[0][2].getValue() && board[0][2].getValue() === board[1][1].getValue() && board[1][1].getValue() === board[2][0].getValue()) return true; // Diagonal winner
+        if (board[0][0].getValue() && board[0][0].getValue() === board[1][1].getValue() 
+            && board[1][1].getValue() === board[2][2].getValue()) return true; // Diagonal winner
+        
+        if (board[0][2].getValue() && board[0][2].getValue() === board[1][1].getValue() 
+            && board[1][1].getValue() === board[2][0].getValue()) return true; // Diagonal winner
         return false; // No winner
     };
 
@@ -141,3 +147,4 @@ function GameController (playerOneName, playerTwoName) {
 
     return { playRound, getActivePlayer, printNewRound }
 }
+
