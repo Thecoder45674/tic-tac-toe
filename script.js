@@ -3,7 +3,6 @@
 ** Each square holds a Cell
 ** and expose placeToken method to  be able add Cells to square
 */
-
 function GameBoard() {
     const rows = 3;
     const columns = 3;
@@ -65,7 +64,7 @@ function Cell() {
 ** The GameController is responsible for controlling the flow state
 ** of the game turns as well as the outcome of the game
 */
-function GameController(playerOneName, playerTwoName) {
+function GameController (playerOneName, playerTwoName) {
     const board = GameBoard();
 
     const players = [
@@ -82,13 +81,26 @@ function GameController(playerOneName, playerTwoName) {
     let activePlayer = players[0];
 
     const switchPlayerTurn = () => {
-        activePlayer = activePlayer === players[0] ? players[1] : players[0];
-    };
+        activePlayer = activePlayer == players[0] ? players[1] : players[0];
+    }
 
-    // Function to print the current state of the board and active player
+    const getActivePlayer = () => activePlayer;
+    let gameActive = true;
+
     const printNewRound = () => {
         board.printBoard();
-        console.log(`${activePlayer.name}'s turn.`);
+        console.log(`${getActivePlayer().name}'s turn.`);
+    };
+
+    const checkForWinner = (board) => {
+        // Check rows and columns for a winner
+        for (let i = 0; i < 3; i++) {
+            if (board[i][0].getValue() && board[i][0].getValue() === board[i][1].getValue() && board[i][1].getValue() === board[i][2].getValue()) return true; // Row winner
+            if (board[0][i].getValue() && board[0][i].getValue() === board[1][i].getValue() && board[1][i].getValue() === board[2][i].getValue()) return true; // Column winner
+        }
+        // Check diagonals for a winner
+        if (board[0][0].getValue() && board[0][0].getValue() === board[1][1].getValue() && board[1][1].getValue() === board[2][2].getValue()) return true; // Diagonal winner
+        if (board[0][2].getValue() && board[0][2].getValue() === board[1][1].getValue() && board[1][1].getValue() === board[2][0].getValue()) return true; // Diagonal winner
+        return false; // No winner
     };
 }
-
