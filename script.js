@@ -13,7 +13,7 @@ function GameBoard() {
     for (let i = 0; i < rows; i++) {
         board[i] = [];
         for (let j = 0; j < columns; j++) {
-            board[i].push(new Cell());
+            board[i].push(Cell());
         };
     };
 
@@ -33,9 +33,8 @@ function GameBoard() {
 
     // Function to  print the board
     const printBoard = () => {
-        const boardWithCellValues = board.map((cellRow) => {
-            return cellRow.map(cell => cell.getValue())
-        })
+        const boardWithCellValues = 
+            board.map(cellRow => cellRow.map(cell => cell.getValue()));
         console.log(boardWithCellValues);
     }
 
@@ -48,7 +47,6 @@ function GameBoard() {
 1: Player One token
 2: Player Two token 
 */
-
 function Cell() {
     let value = 0;
 
@@ -64,11 +62,22 @@ function Cell() {
 };
 
 /*
-** The GameController is responsible for controlling the folow state
+** The GameController is responsible for controlling the flow state
 ** of the game turns as well as the outcome of the game
 */
-/*
-function GameController () {
-    
+function GameController(playerOneName, playerTwoName) {
+    const board = GameBoard();
+
+    const players = [
+        {
+            name: playerOneName,
+            token: 1
+        }, 
+        {
+            name: playerTwoName,
+            token: 2
+        }
+    ];
+
+    let activePlayer = players[0];
 }
-*/
