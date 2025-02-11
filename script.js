@@ -1,7 +1,7 @@
-/* 
-** The GameBoard represents the stat of the board
+/*
+** The GameBoard represents the state of the board
 ** Each square holds a Cell
-** and expose placeToken method to  be able add Cells to square
+** and exposes placeMove method to add Cells to the square
 */
 function GameBoard() {
     const rows = 3;
@@ -19,29 +19,29 @@ function GameBoard() {
     // Function to return the board
     const getBoard = () => board;
 
-    // Function to place token in cell
-    const placeToken = (row, column, player) => {
+    // Function to place move in cell
+    const placeMove = (row, column, player) => {
         const cell = board[row][column];
 
         if (cell.getValue() !== 0) {
             console.log('Cell is already occupied!');
             return;
         }
-        cell.addToken(player);
+        cell.addMove(player);
     }
 
-    // Function to  print the board
+    // Function to print the board
     const printBoard = () => {
         const boardWithCellValues = 
             board.map(cellRow => cellRow.map(cell => cell.getValue()));
         console.log(boardWithCellValues);
     }
 
-    return { getBoard, placeToken, printBoard };
+    return { getBoard, placeMove, printBoard };
 };
 
 /*
- A Cell represents one square on the board and can have one off
+** A Cell represents one square on the board and can have one of
 0: no token currently in square
 1: Player One token
 2: Player Two token 
@@ -49,15 +49,15 @@ function GameBoard() {
 function Cell() {
     let value = 0;
 
-    // Accept player tokes to cahnge value of the cell
-    const addToken = (player) => {
+    // Accept player moves to change the value of the cell
+    const addMove = (player) => {
         value = player;
     }
 
     // How we will retrieve the current value of this cell through closure
     const getValue = () => value;
     
-    return {addToken, getValue};
+    return { addMove, getValue };
 };
 
 /*
@@ -81,7 +81,7 @@ function GameController (playerOneName, playerTwoName) {
     let activePlayer = players[0];
 
     const switchPlayerTurn = () => {
-        activePlayer = activePlayer == players[0] ? players[1] : players[0];
+        activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
 
     const getActivePlayer = () => activePlayer;
@@ -120,11 +120,11 @@ function GameController (playerOneName, playerTwoName) {
             return; // Prevent further moves if the game has ended
         }
 
-        // Place token for the current player
+        // Place move for the current player
         console.log(
-            `Place ${getActivePlayer().name}'s token into position ${row},${column}`
+            `Place ${getActivePlayer().name}'s move into position ${row},${column}`
         );
-        board.placeToken(row, column, getActivePlayer().token);
+        board.placeMove(row, column, getActivePlayer().token);
 
         printNewRound();
 
@@ -148,3 +148,10 @@ function GameController (playerOneName, playerTwoName) {
     return { playRound, getActivePlayer, printNewRound }
 }
 
+let game =  GameController('farah', 'ali');
+
+game.playRound(0, 0); // farah places token at (0, 0)
+game.playRound(1, 0); // ali places token at (1, 0)
+game.playRound(0, 1); // farah places token at (0, 1)
+game.playRound(1, 1); // ali places token at (1, 1)
+game.playRound(0, 2); // farah places token at (0, 2)
