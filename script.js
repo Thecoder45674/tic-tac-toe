@@ -120,7 +120,7 @@ function GameController (playerOneName, playerTwoName) {
 */
 function ScreenController() {
     const game = GameController("Player 1", "Player 2");
-    const messageDiv = document.querySelector(".text");
+    const messageDiv = document.querySelector(".message");
     const boardDiv = document.querySelector(".board");
 
     const updateScreen = () => {
