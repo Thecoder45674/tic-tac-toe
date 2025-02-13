@@ -24,20 +24,12 @@ function GameBoard() {
         const cell = board[row][column];
 
         if (cell.getValue() !== 0) {
-            console.log('Cell is already occupied!');
             return;
         }
         cell.addMove(player);
     }
 
-    // Function to print the board
-    const printBoard = () => {
-        const boardWithCellValues = 
-            board.map(cellRow => cellRow.map(cell => cell.getValue()));
-        console.log(boardWithCellValues);
-    }
-
-    return { getBoard, placeMove, printBoard };
+    return { getBoard, placeMove};
 };
 
 /*
@@ -89,11 +81,6 @@ function GameController (playerOneName, playerTwoName) {
     const getBoard = () => board.getBoard();
     const isGameOver = () => gameOver;
 
-    const printNewRound = () => {
-        board.printBoard();
-        console.log(`${getActivePlayer().name}'s turn.`);
-    };
-
     const checkForWinner = (board) => {
         // Check rows and columns for a winner
         for (let i = 0; i < 3; i++) {
@@ -119,18 +106,12 @@ function GameController (playerOneName, playerTwoName) {
     const playRound = (row, column) => {
     if (gameOver) return;
 
-        // Place move for the current player
-        console.log(
-            `Place ${getActivePlayer().name}'s move into position ${row},${column}`
-        );
         board.placeMove(row, column, getActivePlayer().token);
 
         if (checkForWinner(board.getBoard())) {
-            console.log(`${getActivePlayer().name} wins!`);
             gameOver = true;
             return;
         } else if (isDraw(board.getBoard())) { 
-            console.log("It's a draw!");
             gameOver = true;
             return;
         }
@@ -139,8 +120,6 @@ function GameController (playerOneName, playerTwoName) {
         switchPlayerTurn();
         printNewRound();
     }
-
-    printNewRound();
 
     return { playRound, getActivePlayer, getBoard, isGameOver};
 }
