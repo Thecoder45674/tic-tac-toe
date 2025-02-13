@@ -66,6 +66,7 @@ function Cell() {
 */
 function GameController (playerOneName, playerTwoName) {
     const board = GameBoard();
+    let gameOver = false;
 
     const players = [
         {
@@ -85,7 +86,8 @@ function GameController (playerOneName, playerTwoName) {
     }
 
     const getActivePlayer = () => activePlayer;
-    let gameActive = true;
+    const getBoard = () => board.getBoard();
+    const isGameOver = () => gameOver;
 
     const printNewRound = () => {
         board.printBoard();
@@ -115,10 +117,7 @@ function GameController (playerOneName, playerTwoName) {
         board.every(row => row.every(cell => cell.getValue() !== 0)) && !checkForWinner(board);
 
     const playRound = (row, column) => {
-        if (!gameActive) {
-            console.log("The game is over! No further moves can be made.");
-            return; // Prevent further moves if the game has ended
-        }
+    if (gameOver) return;
 
         // Place move for the current player
         console.log(
@@ -126,15 +125,13 @@ function GameController (playerOneName, playerTwoName) {
         );
         board.placeMove(row, column, getActivePlayer().token);
 
-        printNewRound();
-
         if (checkForWinner(board.getBoard())) {
             console.log(`${getActivePlayer().name} wins!`);
-            gameActive = false;
+            gameOver = true;
             return;
         } else if (isDraw(board.getBoard())) { 
             console.log("It's a draw!");
-            gameActive = false;
+            gameOver = true;
             return;
         }
 
@@ -145,9 +142,67 @@ function GameController (playerOneName, playerTwoName) {
 
     printNewRound();
 
-    return { playRound, getActivePlayer, printNewRound }
+    return { playRound, getActivePlayer, getBoard, isGameOver};
 }
 
 function ScreenController() {
-    
-}
+    const game = GameController("Player 1", "Player 2");
+    const playerTurnDiv = document.querySelector(".turn");
+    const boardDiv = document.querySelector(".board");
+
+    const updateScreen = () => {
+        // Clear the board
+        boardDiv.textContent = "";
+
+        // Get the latest board and player turn
+        const board = game.getBoard();
+        const activePlayer = game.getActivePlayer();
+
+        // Check if the game is over and display appropriate message
+        if (game.isGameOver()) {
+            if (checkForWinner(board)) {
+                playerTurnDiv.textContent = `${activePlayer.name} wins!`; // Player wins
+            } else {
+                playerTurnDiv.textContent = "It's a draw!"; // Game draw
+            }
+            return; // Stop further updates
+        }
+
+        // Display player's turn
+        //playerTurnDiv.textContent = `${activePlayer.name}'s turn ...`;
+
+        // Render board squares
+        board.forEach((row, rowIndex) => {
+            row.forEach((cell, colIndex) => {
+                const cellButton = document.createElement("button");
+                cellButton.classList.add("cell");
+
+                cellButton.dataset.column = colIndex;
+                cellButton.dataset.row = rowIndex;
+
+                cellButton.textContent = cell.getValue();
+                
+                boardDiv.appendChild(cellButton);
+            });
+        });
+    };
+
+    // Add event listener for the board
+    function clickHandlerBoard(e) {
+        const selectedRow = e.target.dataset.row;
+        const selectedColumn = e.target.dataset.column;
+
+        // Ensure a valid selection
+        if (selectedColumn === undefined || selectedRow === undefined || game.isGameOver()) return;
+
+        game.playRound(parseInt(selectedRow), parseInt(selectedColumn));
+        updateScreen();
+    }
+
+    boardDiv.addEventListener("click", clickHandlerBoard);
+
+    // Initial render
+    updateScreen();
+};
+
+ScreenController();
