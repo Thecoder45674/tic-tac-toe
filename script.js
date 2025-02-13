@@ -148,10 +148,6 @@ function GameController (playerOneName, playerTwoName) {
     return { playRound, getActivePlayer, printNewRound }
 }
 
-let game =  GameController('farah', 'ali');
-
-game.playRound(0, 0); // farah places token at (0, 0)
-game.playRound(1, 0); // ali places token at (1, 0)
-game.playRound(0, 1); // farah places token at (0, 1)
-game.playRound(1, 1); // ali places token at (1, 1)
-game.playRound(0, 2); // farah places token at (0, 2)
+function ScreenController() {
+    
+}
