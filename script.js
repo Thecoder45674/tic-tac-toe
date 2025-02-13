@@ -119,7 +119,6 @@ function ScreenController() {
     const boardDiv = document.querySelector(".board");
 
     const updateScreen = () => {
-        console.log("updateScreen called");
         // Clear the board
         boardDiv.textContent = "";
 
@@ -129,9 +128,7 @@ function ScreenController() {
 
         // Check if the game is over and display appropriate message
         if (game.isGameOver()) {
-            console.log("The game is over");
             if (game.checkForWinner(board)) {
-                console.log(`${activePlayer.name} win the game`);
                 playerTurnDiv.textContent = `${activePlayer.name} wins!`; // Player wins
             } else {
                 playerTurnDiv.textContent = "It's a draw!"; // Game draw
@@ -140,7 +137,7 @@ function ScreenController() {
         }
 
         // Display player's turn
-        playerTurnDiv.textContent = `${activePlayer.name}'s turn ...`;
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn`;
 
         // Render board squares
         board.forEach((row, rowIndex) => {
@@ -169,7 +166,6 @@ function ScreenController() {
         game.playRound(parseInt(selectedRow), parseInt(selectedColumn));
         updateScreen();
     }
-
     boardDiv.addEventListener("click", clickHandlerBoard);
 
     // Initial render
