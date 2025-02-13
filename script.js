@@ -78,8 +78,9 @@ function GameController (playerOneName, playerTwoName) {
     }
 
     const getActivePlayer = () => activePlayer;
+    let gameActive = true;
+
     const getBoard = () => board.getBoard();
-    const isGameOver = () => gameOver;
 
     const checkForWinner = (board) => {
         // Check rows and columns for a winner
@@ -104,24 +105,25 @@ function GameController (playerOneName, playerTwoName) {
         board.every(row => row.every(cell => cell.getValue() !== 0)) && !checkForWinner(board);
 
     const playRound = (row, column) => {
-    if (gameOver) return;
+        if (!gameActive) return;
 
         board.placeMove(row, column, getActivePlayer().token);
 
         if (checkForWinner(board.getBoard())) {
-            gameOver = true;
+            gameActive = false;
             return;
         } else if (isDraw(board.getBoard())) { 
-            gameOver = true;
+            gameActive = false;
             return;
         }
 
         // Switch player turn
         switchPlayerTurn();
-        printNewRound();
     }
 
-    return { playRound, getActivePlayer, getBoard, isGameOver};
+    const isGameOver = () => !gameActive;
+
+    return { playRound, getActivePlayer, getBoard, isGameOver, checkForWinner};
 }
 
 function ScreenController() {
@@ -130,6 +132,7 @@ function ScreenController() {
     const boardDiv = document.querySelector(".board");
 
     const updateScreen = () => {
+        console.log("updateScreen called");
         // Clear the board
         boardDiv.textContent = "";
 
@@ -139,7 +142,9 @@ function ScreenController() {
 
         // Check if the game is over and display appropriate message
         if (game.isGameOver()) {
-            if (checkForWinner(board)) {
+            console.log("The game is over");
+            if (game.checkForWinner(board)) {
+                console.log(`${activePlayer.name} win the game`);
                 playerTurnDiv.textContent = `${activePlayer.name} wins!`; // Player wins
             } else {
                 playerTurnDiv.textContent = "It's a draw!"; // Game draw
@@ -148,7 +153,7 @@ function ScreenController() {
         }
 
         // Display player's turn
-        //playerTurnDiv.textContent = `${activePlayer.name}'s turn ...`;
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn ...`;
 
         // Render board squares
         board.forEach((row, rowIndex) => {
