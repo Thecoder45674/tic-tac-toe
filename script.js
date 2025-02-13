@@ -58,27 +58,24 @@ function Cell() {
 */
 function GameController (playerOneName, playerTwoName) {
     const board = GameBoard();
-    let gameOver = false;
-
     const players = [
-        {
-            name: playerOneName,
-            token: 1
-        }, 
-        {
-            name: playerTwoName,
-            token: 2
-        }
+        { name: playerOneName, token: 1}, 
+        { name: playerTwoName, token: 2}
     ];
-
     let activePlayer = players[0];
 
+    //  Function to switch the active player
     const switchPlayerTurn = () => {
         activePlayer = activePlayer === players[0] ? players[1] : players[0];
     }
 
     const getActivePlayer = () => activePlayer;
-    let gameActive = true;
+
+    // Check if the game is over
+    const isGameOver = () => {
+        const currentBoard = board.getBoard();
+        return checkForWinner(currentBoard) || isDraw((currentBoard));
+    };
 
     const getBoard = () => board.getBoard();
 
@@ -105,23 +102,13 @@ function GameController (playerOneName, playerTwoName) {
         board.every(row => row.every(cell => cell.getValue() !== 0)) && !checkForWinner(board);
 
     const playRound = (row, column) => {
-        if (!gameActive) return;
-
-        board.placeMove(row, column, getActivePlayer().token);
-
-        if (checkForWinner(board.getBoard())) {
-            gameActive = false;
-            return;
-        } else if (isDraw(board.getBoard())) { 
-            gameActive = false;
-            return;
+        if (!isGameOver()) {
+            board.placeMove(row, column, getActivePlayer().token);
+            if (!isGameOver()) {
+                switchPlayerTurn();
+            }
         }
-
-        // Switch player turn
-        switchPlayerTurn();
     }
-
-    const isGameOver = () => !gameActive;
 
     return { playRound, getActivePlayer, getBoard, isGameOver, checkForWinner};
 }
