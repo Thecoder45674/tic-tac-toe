@@ -23,7 +23,7 @@ function GameBoard() {
     const placeMove = (row, column, player) => {
         const cell = board[row][column];
 
-        if (cell.getValue() !== 0) {
+        if (cell.getValue() !== null) {
             return;
         }
         cell.addMove(player);
@@ -39,7 +39,7 @@ function GameBoard() {
 2: Player Two token 
 */
 function Cell() {
-    let value = 0;
+    let value = null;
 
     // Accept player moves to change the value of the cell
     const addMove = (player) => {
@@ -99,7 +99,7 @@ function GameController (playerOneName, playerTwoName) {
 
     // Function to check if the game is a draw
     const isDraw = (board) => 
-        board.every(row => row.every(cell => cell.getValue() !== 0)) && !checkForWinner(board);
+        board.every(row => row.every(cell => cell.getValue() !== null)) && !checkForWinner(board);
 
     const playRound = (row, column) => {
         if (!isGameOver()) {
@@ -148,7 +148,8 @@ function ScreenController() {
                 cellButton.dataset.column = colIndex;
                 cellButton.dataset.row = rowIndex;
 
-                cellButton.textContent = cell.getValue();
+                cellValue = cell.getValue();
+                cellButton.textContent = cellValue === 1 ? "X" : cellValue === 2 ? "O" : "";
                 
                 boardDiv.appendChild(cellButton);
             });
