@@ -94,6 +94,7 @@ function GameController (playerOneName, playerTwoName) {
         
         if (board[0][2].getValue() && board[0][2].getValue() === board[1][1].getValue() 
             && board[1][1].getValue() === board[2][0].getValue()) return true; // Diagonal winner
+        
         return false; // No winner
     };
 
@@ -113,31 +114,34 @@ function GameController (playerOneName, playerTwoName) {
     return { playRound, getActivePlayer, getBoard, isGameOver, checkForWinner};
 }
 
+/*
+** The ScreenController manages the game's display and interactions
+** It updates the screen based on the game's state and handles player input
+*/
 function ScreenController() {
     const game = GameController("Player 1", "Player 2");
-    const textDiv = document.querySelector(".text");
+    const messageDiv = document.querySelector(".text");
     const boardDiv = document.querySelector(".board");
 
     const updateScreen = () => {
         // Clear the board
         boardDiv.textContent = "";
 
-        // Get the latest board and player turn
         const board = game.getBoard();
         const activePlayer = game.getActivePlayer();
 
         // Check if the game is over and display appropriate message
         if (game.isGameOver()) {
             if (game.checkForWinner(board)) {
-                textDiv.textContent = `${activePlayer.name} wins!`; // Player wins
+                messageDiv.textContent = `${activePlayer.name} wins!`;
             } else {
-                textDiv.textContent = "It's a draw!"; // Game draw
+                messageDiv.textContent = "It's a draw!";
             }
             return; // Stop further updates
         }
 
         // Display player's turn
-        textDiv.textContent = `${activePlayer.name}'s turn`;
+        messageDiv.textContent = `${activePlayer.name}'s turn`;
 
         // Render board squares
         board.forEach((row, rowIndex) => {
